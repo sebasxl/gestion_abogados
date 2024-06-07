@@ -34,6 +34,22 @@ exports.getCaseFollowUps = async (req, res) => {
   }
 };
 
+// Obtener todas las entradas de seguimiento
+exports.getAllCaseUpdates = async (req, res) => {
+  try {
+    const followUps = await CaseFollowUp.findAll({
+      where: { borrado_logico: false },
+      include: [{
+        model: Case,
+        attributes: ['numero_caso', 'estado', 'tipo_caso']
+      }]
+    });
+    res.status(200).json(followUps);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener las entradas de seguimiento', error });
+  }
+};
+
 // Actualizar una entrada de seguimiento
 exports.updateCaseFollowUp = async (req, res) => {
   const { id } = req.params;
