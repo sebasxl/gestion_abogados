@@ -1,18 +1,24 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+
 const auth = (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '');
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  const token = authHeader.split(' ')[1];
   if (!token) {
-    return res.status(401).json({ message: 'Acceso denegado' });
+    return res.status(401).json({ message: 'Invalid token format' });
   }
 
   try {
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (error) {
-    res.status(400).json({ message: 'Token inválido' });
+    return res.status(401).json({ message: 'Failed to authenticate token' });
   }
 };
 
