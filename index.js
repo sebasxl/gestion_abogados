@@ -1,5 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const sequelize = require('./src/config/database');
 const userRoutes = require('./src/routes/userRoutes');
 const lawyerRoutes = require('./src/routes/lawyerRoutes');
@@ -7,13 +9,18 @@ const caseRoutes = require('./src/routes/caseRoutes');
 const caseFollowUpRoutes = require('./src/routes/caseFollowUpRoutes');
 const auth = require('./src/middleware/auth');
 
-require('dotenv').config();
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
+
+// Configurar CORS
+const corsOptions = {
+  origin: 'http://localhost:5173', // Cambia esto a tu URL de frontend
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Rutas
 app.use('/api/users', userRoutes);
