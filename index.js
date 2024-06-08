@@ -7,6 +7,7 @@ const userRoutes = require('./src/routes/userRoutes');
 const lawyerRoutes = require('./src/routes/lawyerRoutes');
 const caseRoutes = require('./src/routes/caseRoutes');
 const caseFollowUpRoutes = require('./src/routes/caseFollowUpRoutes');
+const organizationRoutes = require('./src/routes/organizationRoutes');
 const auth = require('./src/middleware/auth');
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/lawyers', auth, lawyerRoutes); // Protegemos las rutas de abogados con autenticación
 app.use('/api/cases', auth, caseRoutes); // Protegemos las rutas de casos con autenticación
 app.use('/api/case-followups', auth, caseFollowUpRoutes); // Protegemos las rutas de seguimientos con autenticación
+app.use('/api/organizations', organizationRoutes); // Rutas para organizaciones
 
 // Ruta protegida de ejemplo
 app.get('/api/protected', auth, (req, res) => {
